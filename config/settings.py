@@ -47,12 +47,31 @@ INSTALLED_APPS = [
 
     #3rd party
     'rest_framework',
+    'rest_framework.authtoken',
+    'rest_auth',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
 
 
     #local
     'accounts.apps.AccountsConfig',
+    'api.apps.ApiConfig',
     'frontend.apps.FrontendConfig',
+    'recipes.apps.RecipesConfig',
+
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        # 'rest_framework.permissions.AllowAny',
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ]
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -155,3 +174,25 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 REACT_APP_DIR = os.path.join(BASE_DIR, 'frontend/static')
 STATICFILES_DIRS = ( os.path.join(BASE_DIR, 'frontend/static/build/static'), )
+
+SITE_ID = 1
+
+# https://docs.djangoproject.com/en/3.0/ref/settings/#email-backend
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
+# https://django-rest-auth.readthedocs.io/en/latest/configuration.html
+REST_AUTH_SERIALIZERS = {
+    'TOKEN_SERIALIZER': 'accounts.serializers.TokenSerializer',
+}
+
+#https://docs.djangoproject.com/en/3.1/ref/settings/#default-file-storage
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']
+AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
+AWS_STORAGE_BUCKET_NAME = os.environ['AWS_STORAGE_BUCKET_NAME']
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
