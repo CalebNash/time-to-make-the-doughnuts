@@ -32,3 +32,22 @@
 .recipe-preview{
   color:#fff;
 }
+
+.card img{
+  width: 50%;
+  align-self: center;
+}
+
+.cook-info{
+  border: solid 1px gray;
+}
+
+.cook-info p{
+  font-size: 12px;
+  color: gray;
+}
+
+.cook-info-row{
+  justify-content: center;
+  margin-top: 20px;
+}

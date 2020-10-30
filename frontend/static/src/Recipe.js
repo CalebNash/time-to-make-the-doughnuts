@@ -4,6 +4,7 @@ import Register from './components/Register'
 import Login from './components/Login.js';
 import RecipeList from './components/RecipeList.js';
 import RecipeForm from './components/RecipeForm.js';
+import RecipeDisplay from './components/RecipeDisplay.js';
 import Cookies from 'js-cookie'
 import './App.css';
 
@@ -15,6 +16,7 @@ class Recipe extends React.Component{
     recipes: [],
     page: 'Home',
     loggedIn: Cookies.get('Authorization')? true: false,
+    pickedRecipe: {}
 
   }
 
@@ -22,6 +24,7 @@ class Recipe extends React.Component{
   this.handleLogin = this.handleLogin.bind(this);
   this.handleLogout = this.handleLogout.bind(this);
   this.handleClick = this.handleClick.bind(this);
+  this.choose = this.choose.bind(this);
 }
 
 componentDidMount() {
@@ -108,8 +111,15 @@ async handleLogin(e, obj){
     this.setState({page: display});
   }
 
+  choose(id){
+    const recipeId = this.state.recipes.find(recipe => recipe.id === id);
+    this.setState({pickedRecipe: recipeId, page: 'Recipe Display'});
+
+  }
+
 
   render(){
+
     let loggedIn = this.state.loggedIn;
     let dropItemBottom
     let dropItemTop
@@ -125,18 +135,16 @@ async handleLogin(e, obj){
     let page = this.state.page;
     let display;
     if(page === 'Home'){
-      display = <RecipeList recipes={this.state.recipes}/>;
+      display = <RecipeList recipes={this.state.recipes} choose={this.choose}/>;
     }else if(page === 'Register'){
       display = <Register handleRegistration = {this.handleRegistration}/>;
     }else if(page === 'Login'){
       display = <Login handleLogin = {this.handleLogin}/>;
     }else if(page === 'New Recipe'){
       display = <RecipeForm handleLogin = {this.addRecipe}/>;
+    }else if(page === 'Recipe Display'){
+      display = <RecipeDisplay pickedRecipe = {this.state.pickedRecipe}/>;
     }
-
-    // <div className='log-status'><button className="btn  menu-button"type="button" onClick={this.handleLogout}>Logout</button></div>
-    // <div className='log-status'><button className="btn  menu-button"type="button" onClick={() => this.handleClick('Login')}>Login</button></div>
-    // <div className='log-status'><button className="btn  menu-button"type="button" onClick={() => this.handleClick('New Recipe')}>New Recipe</button></div>
 
     return (
       <React.Fragment>
